@@ -329,6 +329,25 @@
     font-size: 2rem;
 }
 
+.final-message .final-note {
+    margin-top: 20px;
+    font-size: 0.95rem;
+    font-family: 'Nunito', sans-serif;
+    color: var(--color-ink);
+    opacity: 0.75;
+    line-height: 1.7;
+    font-style: italic;
+    border-top: 1px dashed rgba(0,0,0,0.15);
+    padding-top: 16px;
+}
+
+.final-message .final-note small {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
 #scene-8, #scene-12 {
     top: 0;
     bottom: 0;
