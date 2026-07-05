@@ -1,0 +1,122 @@
+/* css/animations.css */
+
+/* Background Gradient Cycles */
+@keyframes gradientCycle {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes gradientCycleWarm {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Toast Animations */
+@keyframes toastEnter {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes toastLeave {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+/* Screen Shake (Scene 4 / Scene 8) */
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+.shake-active {
+    animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+/* Blinking elements (Terminal) */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.blink {
+    animation: blink 1s step-end infinite;
+}
+
+/* Progress bar fill (Terminal) */
+@keyframes fillBar {
+    from { width: 0%; }
+    to { width: 100%; }
+}
+
+/* Mascot Idle Bobbing */
+@keyframes mascotBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.mascot-idle {
+    animation: mascotBob 3s ease-in-out infinite;
+}
+
+/* Candle flame flicker */
+@keyframes flicker {
+    0% { transform: rotate(-1deg) scale(1); opacity: 0.9; }
+    25% { transform: rotate(2deg) scale(1.05); opacity: 1; }
+    50% { transform: rotate(-2deg) scale(0.95); opacity: 0.8; }
+    75% { transform: rotate(1deg) scale(1.02); opacity: 0.95; }
+    100% { transform: rotate(-1deg) scale(1); opacity: 0.9; }
+}
+
+/* Checkmark pop */
+@keyframes popIn {
+    0% { transform: scale(0); opacity: 0; }
+    70% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.pop-in {
+    animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    #bg-gradient {
+        animation: none !important;
+        /* Static fallback */
+        background: var(--color-lavender);
+    }
+    
+    .shake-active {
+        animation: none !important;
+    }
+}

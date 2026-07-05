@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Verify Kash 🕵️🎂</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕵️</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/scenes.css">
+</head>
+<body>
+    <!-- Background Gradient & Particles -->
+    <div id="bg-gradient"></div>
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- UI Overlay (Toasts, Case File) -->
+    <div id="ui-layer">
+        <aside id="case-file" class="hidden">
+            <div class="stat"><span class="stat-label">Evidence</span> <span id="stat-evidence" class="stat-value">0</span></div>
+            <div class="stat"><span class="stat-label">Suspicious</span> <span id="stat-suspicious" class="stat-value">0</span></div>
+            <div class="stat"><span class="stat-label">Confidence</span> <span id="stat-confidence" class="stat-value">3%</span></div>
+        </aside>
+        <div id="toast-container"></div>
+    </div>
+
+    <!-- The Mascot (Dynamic DOM-based SVG/CSS) -->
+    <div id="mascot-container" class="hidden">
+        <div id="speech-bubble" class="hidden">
+            <p id="mascot-dialogue"></p>
+        </div>
+        <div id="mascot">
+            <!-- Drawn via CSS/DOM in mascot.js -->
+        </div>
+    </div>
+
+    <!-- Scene Container -->
+    <main id="scene-container">
+        
+        <!-- Scene 0: Boot Sequence -->
+        <section id="scene-0" class="scene active" data-scene="0">
+            <div class="terminal">
+                <div id="term-lines"></div>
+                <div id="term-action" class="hidden">
+                    <button class="btn-primary" id="btn-begin">Begin verification.</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scene 1: First Identity Check -->
+        <section id="scene-1" class="scene" data-scene="1">
+            <div class="card">
+                <div class="prompt-area" id="s1-prompt">Are you Kash?</div>
+                <div class="actions" id="s1-actions">
+                    <button class="btn-primary s1-btn" data-val="yes">I'm Kash.</button>
+                    <button class="btn-secondary s1-btn" data-val="no">I'm not Kash.</button>
+                </div>
+                <div class="scan-area hidden" id="s1-scan">
+                    <!-- Scan lines populated by JS -->
+                </div>
+                <div class="actions hidden" id="s1-continue-wrapper">
+                    <button class="btn-primary" id="s1-continue">Continue investigation.</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scene 2: Trust Issues -->
+        <section id="scene-2" class="scene" data-scene="2">
+            <div class="card">
+                <div class="prompt-area">Do you promise you're Kash?</div>
+                <div class="actions">
+                    <button class="btn-primary s2-btn" data-val="yes">I promise.</button>
+                    <button class="btn-secondary s2-btn" data-val="no">No.</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scene 3: Human Verification -->
+        <section id="scene-3" class="scene" data-scene="3">
+            <div class="card">
+                <div class="prompt-area">Are you human?</div>
+                <div class="actions">
+                    <button class="btn-primary s3-btn" data-val="yes">Yes</button>
+                    <button class="btn-secondary s3-btn" data-val="no">No</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scene 4: Cuteness Scan -->
+        <section id="scene-4" class="scene" data-scene="4">
+            <div class="card">
+                <div class="scan-area" id="s4-scan">
+                    <!-- Scan lines populated by JS -->
+                </div>
+                <div class="actions hidden" id="s4-actions">
+                    <button class="btn-primary" id="s4-continue">Continue, once cooled.</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scene 5: Evidence Submission -->
+        <section id="scene-5" class="scene" data-scene="5">
+            <div class="corkboard" id="s5-corkboard">
+                <div class="red-string"></div>
+                <!-- Photos added here -->
+                
+                <div class="upload-ui" id="s5-upload-ui">
+                    <label class="btn-primary upload-btn">
+                        Submit Photo
+                        <input type="file" id="s5-file-input" accept="image/*" class="hidden-input">
+                    </label>
+                </div>
+                
+                <div class="actions evidence-actions">
+                    <button class="btn-secondary" id="s5-skip">Skip for now, detective.</button>
+                    <button class="btn-primary hidden" id="s5-continue">This is compelling. Continue</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scene 6: Personality Match -->
+        <section id="scene-6" class="scene" data-scene="6">
+            <div class="card" id="s6-card">
+                <div class="prompt-area" id="s6-question"></div>
+                <div class="actions" id="s6-answers">
+                    <!-- Buttons populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Scene 7: Final Approval -->
+        <section id="scene-7" class="scene" data-scene="7">
+            <div class="card">
+                <div class="actions single-action">
+                    <button class="btn-primary" id="s7-btn">Continue</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scene 8: Fake Error -->
+        <section id="scene-8" class="scene" data-scene="8">
+            <div class="error-overlay">
+                <h2>ERROR</h2>
+                <p>Too much birthday detected.</p>
+                <p class="blink">Restarting...</p>
+            </div>
+        </section>
+
+        <!-- Scene 9: Closing Report -->
+        <section id="scene-9" class="scene" data-scene="9">
+            <div class="card report-card">
+                <h2>Final Report</h2>
+                <ul class="stats-list" id="s9-stats">
+                    <!-- Populated by JS -->
+                </ul>
+                
+                <div class="confidence-meter-container">
+                    <div class="confidence-label">Final Confidence Rating</div>
+                    <div class="confidence-track">
+                        <div class="confidence-fill" id="s9-meter"></div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn-primary" id="s9-reveal">Reveal verdict</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scene 10: Case Closed (Letter) -->
+        <section id="scene-10" class="scene" data-scene="10">
+            <div class="card letter-card">
+                <div class="letter-content" id="s10-letter">
+                    <p>Dear Kash,</p>
+                    <p>You get offended way too much, so please don't spill water on me again.</p>
+                    <p>I hope today is full of the things you love — because you deserve it.</p>
+                    <p>Happy birthday.</p>
+                </div>
+                <div class="actions">
+                    <button class="btn-secondary" id="s10-continue">Keep going</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scene 11: The Evidence, Revisited -->
+        <section id="scene-11" class="scene" data-scene="11">
+            <div class="slideshow-container" id="s11-slideshow">
+                <!-- Slides added by JS -->
+                <div id="s11-fallback" class="hidden">
+                    <div class="card">
+                        <p>No photo evidence was filed.</p>
+                        <p>The birthday twinkle in your eyes was proof enough anyway.</p>
+                    </div>
+                </div>
+                <div class="actions hidden" id="s11-actions">
+                    <button class="btn-primary" id="s11-continue">Almost done</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scene 12: Make a Wish -->
+        <section id="scene-12" class="scene" data-scene="12">
+            <div class="cake-container">
+                <div class="cake">
+                    <div class="candle" id="s12-candle">
+                        <div class="flame" id="s12-flame"></div>
+                    </div>
+                    <div class="frosting"></div>
+                    <div class="sponge"></div>
+                </div>
+                <div class="final-message hidden" id="s12-message">
+                    <p>Case closed.</p>
+                    <p class="highlight">Happy birthday, Kash. 🎂💛</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/particles.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/mascot.js"></script>
+    <!-- Scenes -->
+    <script src="js/scenes/scene0-boot.js"></script>
+    <script src="js/scenes/scene1-identity.js"></script>
+    <script src="js/scenes/scene2-trust.js"></script>
+    <script src="js/scenes/scene3-human.js"></script>
+    <script src="js/scenes/scene4-cuteness.js"></script>
+    <script src="js/scenes/scene5-evidence.js"></script>
+    <script src="js/scenes/scene6-personality.js"></script>
+    <script src="js/scenes/scene7-approval.js"></script>
+    <script src="js/scenes/scene8-error.js"></script>
+    <script src="js/scenes/scene9-report.js"></script>
+    <script src="js/scenes/scene10-caseclosed.js"></script>
+    <script src="js/scenes/scene11-slideshow.js"></script>
+    <script src="js/scenes/scene12-wish.js"></script>
+    <!-- App Orchestrator -->
+    <script src="js/app.js"></script>
+</body>
+</html>
