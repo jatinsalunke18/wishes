@@ -18,13 +18,15 @@ window.Scene5 = {
 
         const fileInput = document.getElementById('s5-file-input');
         const corkboard = document.getElementById('s5-corkboard');
-        const continueBtn = document.getElementById('s5-continue');
+        const actionBtn = document.getElementById('s5-action');
         const uploadUi = document.getElementById('s5-upload-ui');
         
         let fileCount = 0;
+        let hasUploaded = false;
 
         // Reset inputs on initialization
         fileInput.value = '';
+        actionBtn.textContent = 'Upload Your Proof 📸';
         
         // Remove old appended photos if any
         corkboard.querySelectorAll('.pinned-photo').forEach(el => el.remove());
@@ -43,7 +45,12 @@ window.Scene5 = {
                     fileCount++;
                     addPhotoToBoard(dataUrl, fileCount);
                     
-                    continueBtn.classList.remove('hidden');
+                    // After first upload, morph the button
+                    if (!hasUploaded) {
+                        hasUploaded = true;
+                        actionBtn.textContent = 'Continue Further →';
+                    }
+
                     if (fileCount >= 3) {
                         uploadUi.classList.add('hidden'); // max 3 to keep UI clean
                     }
@@ -87,14 +94,16 @@ window.Scene5 = {
             mascot.speak(caption.textContent);
         };
 
-        window.App.bindButton('s5-skip', () => {
-            mascot.hideBubble();
-            window.App.goToScene(6);
-        });
-
-        window.App.bindButton('s5-continue', () => {
-            mascot.hideBubble();
-            window.App.goToScene(6);
+        // Single button handles both actions
+        window.App.bindButton('s5-action', () => {
+            if (hasUploaded) {
+                // Already uploaded — continue to next scene
+                mascot.hideBubble();
+                window.App.goToScene(6);
+            } else {
+                // No upload yet — trigger file picker
+                newFileInput.click();
+            }
         });
     }
 };
