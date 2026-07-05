@@ -34,6 +34,14 @@ If you use GitHub, you can host it directly from your repo.
 3. Under "Build and deployment", set the **Source** to `Deploy from a branch` and select your `main` branch.
 4. Click Save. Within a few minutes, your site will be live at `https://[username].github.io/[repo-name]/`.
 
+### Option 4: Deploy to Render
+Render is another powerful platform that supports one-click deployments. This project includes a `render.yaml` blueprint.
+
+1. Create a free account at [Render](https://render.com/).
+2. Go to the Dashboard and click **New +** -> **Blueprint**.
+3. Connect your GitHub repository containing this code.
+4. Render will automatically detect the `render.yaml` file, set it up as a blazing-fast Static Site, and deploy it for you!
+
 ## Running Locally
 
 If you just want to run it on your own computer to test:
