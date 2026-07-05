@@ -19,12 +19,12 @@ window.Scene5 = {
         const fileInput = document.getElementById('s5-file-input');
         const corkboard = document.getElementById('s5-corkboard');
         const actionBtn = document.getElementById('s5-action');
-        const uploadUi = document.getElementById('s5-upload-ui');
+        const actionsDiv = corkboard.querySelector('.evidence-actions');
         
         let fileCount = 0;
         let hasUploaded = false;
 
-        // Reset inputs on initialization
+        // Reset on initialization
         fileInput.value = '';
         actionBtn.textContent = 'Upload Your Proof 📸';
         
@@ -52,7 +52,11 @@ window.Scene5 = {
                     }
 
                     if (fileCount >= 3) {
-                        uploadUi.classList.add('hidden'); // max 3 to keep UI clean
+                        // Max photos reached — auto-continue after a beat
+                        setTimeout(() => {
+                            mascot.hideBubble();
+                            window.App.goToScene(6);
+                        }, 1500);
                     }
                 };
                 reader.readAsDataURL(e.target.files[0]);
@@ -63,10 +67,7 @@ window.Scene5 = {
             const photoEl = document.createElement('div');
             photoEl.className = 'pinned-photo';
             
-            // Randomize position and rotation
             const rot = (Math.random() * 20 - 10).toFixed(1);
-            
-            // Adjust position slightly based on count to avoid stacking perfectly
             const leftOffset = 20 + ((count - 1) * 20) + (Math.random() * 10 - 5);
             const topOffset = 10 + (Math.random() * 20 - 10);
             
@@ -88,20 +89,18 @@ window.Scene5 = {
             photoEl.appendChild(img);
             photoEl.appendChild(caption);
             
-            corkboard.insertBefore(photoEl, uploadUi);
+            corkboard.insertBefore(photoEl, actionsDiv);
             
             mascot.setExpression('confused');
             mascot.speak(caption.textContent);
         };
 
-        // Single button handles both actions
+        // Single button: upload first, then continue
         window.App.bindButton('s5-action', () => {
             if (hasUploaded) {
-                // Already uploaded — continue to next scene
                 mascot.hideBubble();
                 window.App.goToScene(6);
             } else {
-                // No upload yet — trigger file picker
                 newFileInput.click();
             }
         });
