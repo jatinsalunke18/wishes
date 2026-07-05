@@ -6,16 +6,21 @@ window.Scene12 = {
         const candle = document.getElementById('s12-candle');
         const flame = document.getElementById('s12-flame');
         const message = document.getElementById('s12-message');
+        const hint = document.getElementById('s12-hint');
         
         // Ensure flame is lit
         flame.classList.remove('extinguished');
         message.classList.add('hidden');
+        if (hint) hint.style.display = 'block';
 
         // Allow one-time click to blow out
         const blowOut = () => {
             flame.classList.add('extinguished');
             candle.removeEventListener('click', blowOut);
             
+            // Hide the hint
+            if (hint) hint.style.display = 'none';
+
             // Trigger fireworks
             window.Particles.setMode('fireworks');
             
